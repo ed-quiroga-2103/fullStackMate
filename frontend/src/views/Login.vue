@@ -28,6 +28,7 @@ var axios = require('axios');
 
 import {setWithExpiry} from "../util/utilities.js"
 
+
 export default {
     mounted(){
       this.$store.commit("changeLogState", "0");
@@ -57,17 +58,21 @@ export default {
             var data = usrString;
 
             var config = {
-            method: 'post',
-            url: 'http://localhost:8000/login',
-            headers: { 
-                'x-access-token': '', 
-                'Authorization': 'Basic QWRtaW46MTIzNDU=', 
-                'Content-Type': 'application/json'
-            },
-                data: data
+              method: 'post',
+              url: 'http://localhost:8000/login',
+              headers: { 
+                  'Authorization': 'Basic QWRtaW46MTIzNDU=', 
+                  'Content-Type': 'application/json'
+              },
+              data: data
             };
 
-            axios(config).then(response=>{
+
+
+            axios(config)
+              .then(response=>{
+
+                console.log("Response: ", response);
                 //Setteado para que el token expire en 3 horas.
                 //Si el token expira, el sistema debería redireccionar a la pagina de login, dando un mensaje de alerta que la sesión expiró.
                 //Importante: Programar una función para que el tiempo se reinicie cada vez que se interactua con un componente nuevo (SIN REALIZAR)
@@ -82,31 +87,35 @@ export default {
                     }
                     else{
                       var data = response.data.data;
-                      var info = response.data.info;
-                      var user = response.data.user;
+                      var info = response.data.info; //Pedir despues
+                      var user = response.data.user; 
                     
                       var dataStr = JSON.stringify(data);
                       var infoStr = JSON.stringify(info);
                       var userStr = JSON.stringify(user);
 
-
-                      console.log(data);
-                      console.log(info);
-                      console.log(user);
-                    
-                    
+                      //Should we save the graphs as states???
+                      this.$store.commit("changeMainGraphState",data);
+                      
+                      console.log("Store graph: ", this.$store.state.mainGraph);
+                      
+                      //No localstorage                 
+                      //This has to be moved 
                       localStorage.setItem('mainGraph', dataStr);
                       localStorage.setItem('info', infoStr);
                       localStorage.setItem('currentGraphId', 'main');
                       localStorage.setItem('currentGraph', dataStr);
                       localStorage.setItem('user', userStr);
 
+
                       this.$store.commit("changeLogState", "1");
 
-                      this.$router.push('/home');
+                      //this.$router.push('/home');
                       
                     }
                 }
+            }).catch(err => {
+              console.log(err);
             });
 
         }

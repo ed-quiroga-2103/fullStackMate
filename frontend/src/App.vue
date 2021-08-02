@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar class=""/>
+    <NavBar class="" id="navbar"/>
     <div id="app" class="bg-dark-custom">
       <router-view></router-view>
     </div>
@@ -31,10 +31,7 @@ html, body{
   background-color: #283747;
   width: 100%;
   min-height: 100%;
-  margin: 0; 
-  height: 100%; 
-  overflow: hidden
-
+  height: 100%;
 }
 
 </style>

@@ -4,7 +4,7 @@
         <div id = "questions" class="center-screen ">
             <div>
                 <h1>{{this.currentQuestion.question}}</h1>
-                <div v-for="item in this.currentQuestion.equations" :key="item" v-katex:auto="{ colorIsTextColor: false}" class="katex">
+                <div v-for="item in this.currentQuestion.equations" :key="item" v-katex:auto="{colorIsTextColor: false}" class="katex">
                     {{item}}
                 </div>
             </div>

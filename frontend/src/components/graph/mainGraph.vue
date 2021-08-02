@@ -17,7 +17,10 @@ import {getWithExpiry} from "../../util/utilities.js"
 
 export default {
 
+    //Should this be async?
+    //Remove token from here, we should be using cookies
     async created(){
+        //For loading screen;
         this.isLoading = true;
         
         var token = await getWithExpiry('token');
@@ -25,7 +28,7 @@ export default {
         if (token === null){
             //Sesion expirada, debe ingresar de nuevo
             this.$router.push('/');
-
+            
         }
         else{
             this.$store.commit("changeLogState", "1");
@@ -134,15 +137,18 @@ export default {
         },
         getOptions(){
             var options= graphData['options'];
+            const navHeight = document.getElementById("navbar").clientHeight;
+            
             options['size']['w'] = window.innerWidth;
-            options['size']['h'] = window.innerHeight;
-
+            options['size']['h'] = window.innerHeight - navHeight;
+            
             var optionsStr = JSON.stringify(options);
 
             localStorage.setItem('options', optionsStr);
 
             return options;
         },
+
         getNodes(){
             var graphStr = localStorage.getItem("mainGraph");
             var graph = JSON.parse(graphStr);

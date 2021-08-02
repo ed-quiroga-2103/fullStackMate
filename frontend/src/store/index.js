@@ -8,7 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         logged: false,
-        state: "Log In!"
+        state: "Log In!",
+        mainGraph: {}
     },
     getters: {},
     mutations: {
@@ -22,6 +23,10 @@ export default new Vuex.Store({
                 state.logged = false;
                 state.state = "Log In!"
             }
+        },
+
+        changeMainGraphState(state, payload) {
+            state.mainGraph = payload;
         }
 
     },
