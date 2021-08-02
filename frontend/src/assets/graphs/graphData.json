@@ -1,0 +1,17 @@
+{
+    "options": {
+        "force": 10000,
+        "nodeSize": 50,
+        "nodeLabels": true,
+        "linkWidth":15,
+        "canvas":false,
+        "strLinks": true,
+        "size": 
+            {
+            "w": 0,
+            "h": 0
+            }
+        },
+        
+    "graph1": ["https://es.wikipedia.org/wiki/Ecuaci%C3%B3n", "https://www.youtube.com/watch?v=lDk2UVS4iuw"]  
+}
