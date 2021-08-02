@@ -41,10 +41,11 @@ source env/bin/activate  # On Windows use `env\Scripts\activate`
 #### Dependencias de Python
 
 Se pueden instalar mediante _pip_:
-`pip install django`
-`pip install djangorestframework`
-`pip install django-cors-headers` 
-
+```
+pip install django
+pip install djangorestframework
+pip install django-cors-headers
+```
 
 
 
