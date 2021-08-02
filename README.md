@@ -4,6 +4,11 @@ Frontend y Backend, Proyecto Matemática
 
 # Requerimientos
 
+Para la instalación de requerimientos se debe ingresar en la respectiva carpeta que se está preparando. Por ejemplo:
+```
+C:\Users\XYZ>cd C:\Documents\Proyecto\backend
+C:\Users\XYZ>cd C:\Documents\Proyecto\frontend
+```
 Los requierimientos del sistema son los siguientes:
 
 ## Frontend
