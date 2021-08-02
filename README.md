@@ -27,7 +27,10 @@ Requerimientos:
 * django
 * djangorestframework
 * django-cors-headers
+* jwt
+* pymongo
 
+* MongoDB
 
 #### Virtual Enviroment
 
@@ -42,11 +45,14 @@ source env/bin/activate  # On Windows use `env\Scripts\activate`
 
 Se pueden instalar mediante _pip_:
 ```
-pip install django
-pip install djangorestframework
-pip install django-cors-headers
+pip install django djangoframework django-cors-headers PyJWT pymongo
 ```
 
+#### MongoDB
+
+Se debe instalar MongoDB. En la siguiente dirección se encuentran las instrucciones de instalacion: https://docs.mongodb.com/manual/installation/
+
+Adicionalmente, se recomienda instalar la herramienta MongoDBCompass para administrar la base de datos con mayor facilidad.
 
 
 # Instrucciones de Ejecución

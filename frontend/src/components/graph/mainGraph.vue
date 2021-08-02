@@ -1,5 +1,5 @@
 <template>
-    <div class="center-screen bg-dark-custom">
+    <div class="center-screen bg-dark-custom" style="margin: 0; height: 100%; overflow: hidden;">
         <body>
             <Loading :isLoading = "isLoading"/>
             <d3-network :net-nodes="getNodes()" :net-links="getLinks()" :options="getOptions()" ref="graph" v-on:node-click="nodeClick"/>
@@ -9,15 +9,11 @@
 
 <script>
 
-
-
-
 import D3Network from 'vue-d3-network'
 import graphData from '../../assets/graphs/graphData.json'
 import Loading from './LoadingScreen'
 var axios = require('axios');
 import {getWithExpiry} from "../../util/utilities.js"
-
 
 export default {
 
@@ -138,8 +134,8 @@ export default {
         },
         getOptions(){
             var options= graphData['options'];
-            options['size']['w'] = screen.width;
-            options['size']['h'] = screen.height;
+            options['size']['w'] = window.innerWidth;
+            options['size']['h'] = window.innerHeight;
 
             var optionsStr = JSON.stringify(options);
 
@@ -250,52 +246,4 @@ export default {
 
 }
 
-//STYLE CAN NOT BE SCOPED
-
 </script>
-
-
-<style>
-canvas{
-    position:absolute;top:0;left:0}
-    .net{height:100%;margin:0}
-    .node{stroke:rgba(18,120,98,.7);
-
-    stroke-width:3px;
-
-    -webkit-transition:fill .5s ease;
-    transition:fill .5s ease;
-    fill:red
-    }
-    
-    .node.selected{stroke:#caa455}
-    .node.pinned{stroke:rgba(190,56,93,.6)}
-    .link{stroke:rgba(18,120,98,.3)}
-    .link,
-    .node{stroke-linecap:round}
-    .link:hover,
-    .node:hover{stroke:#be385d;stroke-width:5px}
-    .link.selected{stroke:rgba(202,164,85,.6)}
-    .curve{fill:none}
-    .node-label{
-        font-size: 15px;
-        stroke: black;
-        stroke-width: 0.5px;
-        fill: black !important;
-    }
-    .link-label{
-        -webkit-transform:translateY(-.5em);
-    transform:translateY(-.5em);
-    text-anchor:middle
-}
-
-.center-screen {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  overflow: hidden;
-}
-
-</style>

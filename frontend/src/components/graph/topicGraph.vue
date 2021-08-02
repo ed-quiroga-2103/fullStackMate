@@ -1,10 +1,8 @@
 <template>
-    <div class="center-screen bg-dark-custom">
         <body>
             <Loading :isLoading = "isLoading"/>
             <d3-network :net-nodes="getNodes()" :net-links="getLinks()" :options="getOptions()" ref="graph" v-on:node-click="nodeClick"/>
         </body>
-    </div>
 </template>
 
 <script>

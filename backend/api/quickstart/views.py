@@ -97,7 +97,7 @@ def login(request):
         time_limit = datetime.datetime.utcnow() + datetime.timedelta(minutes=30) #Tiempo límite, no se valida en el servidor por el momento, solo en VueJS
         request.data['exp'] = time_limit
         payload = request.data
-        token = jwt.encode(payload,"SECRET_KEY").decode('UTF-8')
+        token = jwt.encode(payload,"SECRET_KEY")
         return JsonResponse({'token':token,'data':data_str, 'info':info, 'user':user, 'status': True}, safe=False)
 
 @api_view(['GET','POST'])
