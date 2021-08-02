@@ -50,7 +50,7 @@ source env/bin/activate  # On Windows use `env\Scripts\activate`
 
 Se pueden instalar mediante _pip_:
 ```
-pip install django djangoframework django-cors-headers PyJWT pymongo
+pip install django djangorestframework django-cors-headers PyJWT pymongo
 ```
 
 #### MongoDB
