@@ -9,7 +9,9 @@ export default new Vuex.Store({
     state: {
         logged: false,
         state: "Log In!",
-        mainGraph: {}
+        mainGraph: {},
+        info: {},
+        user: {}
     },
     getters: {},
     mutations: {
@@ -27,6 +29,14 @@ export default new Vuex.Store({
 
         changeMainGraphState(state, payload) {
             state.mainGraph = payload;
+        },
+
+        changeUserState(state, payload) {
+            state.user = payload;
+        },
+
+        changeInfoState(state, payload) {
+            state.info = payload;
         }
 
     },

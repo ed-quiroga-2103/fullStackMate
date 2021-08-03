@@ -21,7 +21,7 @@
                 <button class="btn btn-outline-primary padR" type="submit" v-on:click="onClickSignUp">Sign Up!</button>
                 <button class="btn btn-outline-primary" type="submit" v-on:click="onClickLogIn">Log In!</button>
             </div>
-                <div class="d-flex ms-auto p-2" v-if="this.$store.state.logged">
+                <div class="d-flex ms-auto p-2" v-if="logged">
                     <button class="btn btn-outline-primary" type="submit">Logged!</button>
                 </div>
             </div>
@@ -30,6 +30,9 @@
 </template> 
 
 <script>
+
+import { isLogged } from "../../util/isLogged";
+
 export default {
     created(){
         this.logged = this.$store.state.logged;
@@ -39,7 +42,7 @@ export default {
     
     data(){
         return {
-            logged: false
+            logged: isLogged(this.$store)
         }
     },
 

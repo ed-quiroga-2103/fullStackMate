@@ -2,7 +2,7 @@
     <div class="center-screen bg-dark-custom" style="margin: 0; height: 100%; overflow: hidden;">
         <body>
             <Loading :isLoading = "isLoading"/>
-            <d3-network :net-nodes="getNodes()" :net-links="getLinks()" :options="getOptions()" ref="graph" v-on:node-click="nodeClick"/>
+            <d3-network :net-nodes="this.nodes" :net-links="this.links" :options="getOptions()" ref="graph" v-on:node-click="nodeClick"/>
         </body>
     </div>
 </template>
@@ -13,7 +13,8 @@ import D3Network from 'vue-d3-network'
 import graphData from '../../assets/graphs/graphData.json'
 import Loading from './LoadingScreen'
 var axios = require('axios');
-import {getWithExpiry} from "../../util/utilities.js"
+import {colorNodes} from "../../util/colorNodes.js"
+import VueCookies from 'vue-cookies';
 
 export default {
 
@@ -22,22 +23,46 @@ export default {
     async created(){
         //For loading screen;
         this.isLoading = true;
+
+        //API call for graph
+        const graphResponse = await axios.get('http://localhost:8000/graph/mainGraph');
+
+        //API call for User (me)
+        const token = VueCookies.get('session_token');
+        var config = {
+            method: 'post',
+            url: 'http://localhost:8000/me',
+            headers: { 
+                'x-access-token': token, 
+                'Authorization': 'Basic QWRtaW46MTIzNDU=', 
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const me = await axios(config);
+
+        console.log("Progress Response: ", me.data);
+
+        this.user = me.data.user;
+
+        //Getting data   
+        const uncoloredNodes = graphResponse.data.nodes;
+        const coloredNodes = colorNodes(uncoloredNodes, this.user.progress);     
+        this.nodes = coloredNodes;
+        this.links = graphResponse.data.links;
+        console.log("Main Graph: ", graphResponse);
+
+
         
-        var token = await getWithExpiry('token');
-        console.log("Token: ", token);
         if (token === null){
             //Sesion expirada, debe ingresar de nuevo
             this.$router.push('/');
-            
         }
         else{
             this.$store.commit("changeLogState", "1");
         }
-
     },
     mounted(){
-        
-        console.log(screen.width, screen.height);
         setTimeout(()=>{
                 this.isLoading = false;
         }, 2000);
@@ -50,6 +75,10 @@ export default {
     },
     data () {
         return {
+            nodes: null,
+            links: null,
+            options: null,
+            user: null,
             fullPage: false,
             nodeLevel: 0,
             nodeData: [],
@@ -138,91 +167,10 @@ export default {
         getOptions(){
             var options= graphData['options'];
             const navHeight = document.getElementById("navbar").clientHeight;
-            
             options['size']['w'] = window.innerWidth;
             options['size']['h'] = window.innerHeight - navHeight;
-            
-            var optionsStr = JSON.stringify(options);
-
-            localStorage.setItem('options', optionsStr);
 
             return options;
-        },
-
-        getNodes(){
-            var graphStr = localStorage.getItem("mainGraph");
-            var graph = JSON.parse(graphStr);
-            var nodes = graph.nodes;
-            var progress = this.getProgress();
-
-            for (let index = 0; index < nodes.length; index++) {
-
-                    //Verifica si cumple con los requisitos
-                    var needs = nodes[index]['needs'];
-
-                    var verified = true;
-                    
-                    if(typeof needs !== 'undefined'){
-                        console.log(needs)
-                        //Itera por la lista de dependencias
-                        for (let cont = 0; cont < needs.length; cont++) {
-                            //Selecciona el indice de la dependencia
-                            const need = needs[cont];
-                            //Verifica que el indice exista
-                            if (typeof progress[need] !== 'undefined'){
-                                //Si existe, y no esta terminado, se coloca como falso
-                                if (!progress[need]['completed']){
-                                    verified = false;
-                                    break;
-                                }
-                            }
-                            //Si no existe, se coloca como amarillo
-                            
-                        }
-
-                    }
-                    else{
-                        verified = false;
-                    }
-
-
-                if (verified){
-                    nodes[index]['_color'] = 'yellow';
-                    continue;
-                }
-
-                //Si existe el registro de ese nodo en los datos del usuario
-                if (typeof progress[index] !== 'undefined'){
-
-                    //Verifica si está completado
-                    if (progress[index]['completed']){
-
-                        nodes[index]['_color'] = 'green';
-
-                    }
-                    
-                    else if (progress[index]['inProgress']){
-
-                        nodes[index]['_color'] = 'blue';
-
-                    }
-                    else{
-                        nodes[index]['_color'] = 'red';
-
-                    }
-                }
-                else{
-                    nodes[index]['_color'] = 'red';
-                }
-
-            }
-            return nodes;
-        },
-
-        getLinks(){
-            var graphStr = localStorage.getItem("mainGraph");
-            var graph = JSON.parse(graphStr);
-            return graph.links
         },
 
         isAvailable(nodeId){
@@ -240,8 +188,7 @@ export default {
 
         getProgress(){
 
-            var userStr = localStorage.getItem("user");
-            var user = JSON.parse(userStr);
+            var user = this.user;
             var progress = user.progress;
 
             return progress;
