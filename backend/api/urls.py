@@ -18,8 +18,6 @@ from rest_framework import routers
 from api.quickstart import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -28,6 +26,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('graph/mainGraph',views.main_graph),
     path('login', views.login),
+    path('me', views.me),
     path('userLevel', views.get_user_level),
     path('topicGraph', views.get_topic_graph),
     path('all_questions', views.get_questions),
