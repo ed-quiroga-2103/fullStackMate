@@ -1,12 +1,21 @@
 <template>
-  <div id="app">
-    <input v-model="latex" placeholder="Insert Equation in LaTex">
-    <p>Latex is: {{ latex }}</p>
-    <p>Equation is</p>
-    <div v-if="renderComponent" v-katex:auto class="katex">
-      {{procLatex}}
-    </div>
+  <div id="about">
+      <div class="abouth">
+          <h3>About</h3>
+      </div>
+      
+      <article>
+        <h1>London</h1>
+        <p>London is the capital city of England. It is the most populous city in the  United Kingdom, with a metropolitan area of over 13 million inhabitants.</p>
+        <p>Standing on the River Thames, London has been a major settlement for two millennia, its history going back to its founding by the Romans, who named it Londinium.</p>
+      </article>
+
+      <div>
+        <h1>Josu</h1>
+      </div>
+
   </div>
+    
 </template>
 
 <script>
@@ -94,5 +103,28 @@ header {
 }
 
 .katex { font-size: 1.2em !important; } 
+
+article {
+  margin-left: 15%;
+  float: left;
+  padding: 100px;
+  width: 70%;
+  background-color: #f1f1f1;
+  height: 400px; /* only for demonstration, should be removed */
+}
+.abouth{
+  background-color: #6e6e77;
+  width: 70%;
+  margin-left:15%; 
+  margin-top: 5%;
+}
+
+.footer {
+  background-color: #777;
+  padding: 10px;
+  text-align: center;
+  color: white;
+}
+
 
 </style>
