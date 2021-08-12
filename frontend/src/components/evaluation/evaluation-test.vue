@@ -1,146 +1,129 @@
 <template>
-
-<div class="quiz-container center" id="quiz">
-            <div class="quiz-header">
-                <h2 id="question">Question text</h2>
-                <ul>
-                    <li>
-                        <input
-                            type="radio"
-                            id="a"
-                            name="answer"
-                            class="answer"
-                        />
-                        <label id="a_text" for="a">Question</label>
-                    </li>
-                    <li>
-                        <input
-                            type="radio"
-                            id="b"
-                            name="answer"
-                            class="answer"
-                        />
-                        <label id="b_text" for="b">Question</label>
-                    </li>
-                    <li>
-                        <input
-                            type="radio"
-                            id="c"
-                            name="answer"
-                            class="answer"
-                        />
-                        <label id="c_text" for="c">Question</label>
-                    </li>
-                    <li>
-                        <input
-                            type="radio"
-                            id="d"
-                            name="answer"
-                            class="answer"
-                        />
-                        <label id="d_text" for="d">Question</label>
-                    </li>
-                </ul>
-            </div>
-            <button id="submit">Submit</button>
+    <div class="quiz-container center" id="quiz">
+        <div class="quiz-header">
+            <h2 id="question">Question text</h2>
+            <ul>
+                <li>
+                    <input type="radio" id="a" name="answer" class="answer" />
+                    <label id="a_text" for="a">Question</label>
+                </li>
+                <li>
+                    <input type="radio" id="b" name="answer" class="answer" />
+                    <label id="b_text" for="b">Question</label>
+                </li>
+                <li>
+                    <input type="radio" id="c" name="answer" class="answer" />
+                    <label id="c_text" for="c">Question</label>
+                </li>
+                <li>
+                    <input type="radio" id="d" name="answer" class="answer" />
+                    <label id="d_text" for="d">Question</label>
+                </li>
+            </ul>
         </div>
-
+        <button id="submit">Submit</button>
+    </div>
 </template>
 
 <script>
 import Vue from 'vue';
 import VueKatex from 'vue-katex';
 import 'katex/dist/katex.min.css';
+import VueCookies from 'vue-cookies';
 
-import {getWithExpiry} from "../../util/utilities.js"
+const cookies = VueCookies();
+
+import { getWithExpiry } from '../../util/utilities.js';
+import { $cookies } from 'vue/types/umd';
 var axios = require('axios');
 
-
 Vue.use(VueKatex, {
-  globalOptions: {
-    displayMode: true,
-    throwOnError: false
-  }
+    globalOptions: {
+        displayMode: true,
+        throwOnError: false
+    }
 });
 
-
 export default {
-    created(){
-
+    created() {
         this.questions = this.getQuestions();
         this.fillAnswerList();
-
     },
     methods: {
-        onClick(index){
+        onClick(index) {
             console.log(index);
         },
-        parseJwt (token) {
+        parseJwt(token) {
             var base64Url = token.split('.')[1];
             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
+            var jsonPayload = decodeURIComponent(
+                atob(base64)
+                    .split('')
+                    .map(function(c) {
+                        return (
+                            '%' +
+                            ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                        );
+                    })
+                    .join('')
+            );
 
             return JSON.parse(jsonPayload);
         },
-        async getQuestions(){
-            var token = await getWithExpiry('token');
-            if (token === null){
+        async getQuestions() {
+            var token = await cookies.get('session_token');
+            if (token === null) {
                 this.$router.push('/');
             }
+
             var usrData = this.parseJwt(token);
-    
 
             var config = {
                 method: 'post',
                 url: 'http://localhost:8000/all_questions',
-                headers: { 
-                    'x-access-token': token, 
-                    'Authorization': 'Basic QWRtaW46MTIzNDU=', 
+                headers: {
+                    'x-access-token': token,
+                    Authorization: 'Basic QWRtaW46MTIzNDU=',
                     'Content-Type': 'application/json'
                 },
-                    data: usrData
-                };
+                data: usrData
+            };
 
-            await axios(config).then(response=>{
+            await axios(config).then(response => {
                 this.questions = response.data.data;
-                this.questions = this.addDollarSigns(this.questions)
+                this.questions = this.addDollarSigns(this.questions);
                 this.currentQuestion = this.questions[0];
-
             });
         },
-        getProgress(){
-
-            var userStr = localStorage.getItem("user");
+        getProgress() {
+            var userStr = localStorage.getItem('user');
             var user = JSON.parse(userStr);
             var progress = user.progress;
 
             return progress;
-
         },
-        async nextQuestion(){
-            
+        async nextQuestion() {
             this.selected[this.answers[this.currentQuestionIndex]] = false;
-           
-            if(this.currentQuestionIndex < this.questions.length-1){
 
-                this.currentQuestionIndex+=1;
-                this.currentQuestion = this.questions[this.currentQuestionIndex];
-            }
-            else{
-                console.log("Finished", this.answers);
+            if (this.currentQuestionIndex < this.questions.length - 1) {
+                this.currentQuestionIndex += 1;
+                this.currentQuestion = this.questions[
+                    this.currentQuestionIndex
+                ];
+            } else {
+                console.log('Finished', this.answers);
                 console.log('Answers', this.getCorrectAnswers());
 
-                console.log('result', this.isEqualList(this.answers,this.getCorrectAnswers()));
+                console.log(
+                    'result',
+                    this.isEqualList(this.answers, this.getCorrectAnswers())
+                );
 
-                if(this.isEqualList(this.answers,this.getCorrectAnswers())){
-
-                    if(this.level === 2){
-
+                if (this.isEqualList(this.answers, this.getCorrectAnswers())) {
+                    if (this.level === 2) {
                         console.log('done');
                         var token = await getWithExpiry('token');
-                        if (token === null){
+                        if (token === null) {
                             this.$router.push('/');
                         }
 
@@ -148,132 +131,118 @@ export default {
 
                         var currentLevel = localStorage.getItem('currentLevel');
 
-                        progress[parseInt(currentLevel)-1]['completed'] = 1;
-
+                        progress[parseInt(currentLevel) - 1]['completed'] = 1;
 
                         var config = {
                             method: 'post',
                             url: 'http://localhost:8000/update_progress',
-                            headers: { 
-                                'x-access-token': token, 
-                                'Authorization': 'Basic QWRtaW46MTIzNDU=', 
+                            headers: {
+                                'x-access-token': token,
+                                Authorization: 'Basic QWRtaW46MTIzNDU=',
                                 'Content-Type': 'application/json'
                             },
-                                data: progress
-                            };
+                            data: progress
+                        };
 
-                        axios(config).then(response=>{
-                            
+                        axios(config).then(response => {
                             console.log(response);
 
-                            var userStr = localStorage.getItem("user");
+                            var userStr = localStorage.getItem('user');
                             var user = JSON.parse(userStr);
                             user.progress = progress;
 
                             userStr = JSON.stringify(user);
                             localStorage.setItem('user', userStr);
-
                         });
-
-
-                    }
-                    else this.level +=1;
-
-                }
-
-                else{
-
+                    } else this.level += 1;
+                } else {
                     console.log('wrong answers');
-
                 }
-
-            }
-        },
-        prevQuestion(){
-            if(this.currentQuestionIndex > 0){
-
-                this.currentQuestionIndex-=1;
-                this.currentQuestion = this.questions[this.currentQuestionIndex];
-            }
-            else{
-                console.log("Finished")
             }
         },
 
-        isEqualList(list1, list2){
-            
-            if(list1.length === list2.length){
+        prevQuestion() {
+            if (this.currentQuestionIndex > 0) {
+                this.currentQuestionIndex -= 1;
+                this.currentQuestion = this.questions[
+                    this.currentQuestionIndex
+                ];
+            } else {
+                console.log('Finished');
+            }
+        },
 
+        isEqualList(list1, list2) {
+            if (list1.length === list2.length) {
                 for (let index = 0; index < list1.length; index++) {
-                    if(list1[index] !== list2[index]){
+                    if (list1[index] !== list2[index]) {
                         return false;
                     }
                 }
 
                 return true;
-
-            }
-            else{
+            } else {
                 return false;
             }
-
         },
 
-        addDollarSigns(questions){
-            
+        addDollarSigns(questions) {
             for (let index = 0; index < questions.length; index++) {
                 const question = questions[index];
-                
-                for (let index = 0; index < question.equations.length; index++) {
-                    const equation = question.equations[index];
-                    question.equations[index] = "$$ \\color{black} " + equation + "$$";
-                }
 
+                for (
+                    let index = 0;
+                    index < question.equations.length;
+                    index++
+                ) {
+                    const equation = question.equations[index];
+                    question.equations[index] =
+                        '$$ \\color{black} ' + equation + '$$';
+                }
             }
 
-            return questions
+            return questions;
         },
-        fillAnswerList(){
+        fillAnswerList() {
             for (let index = 0; index < this.questions.length; index++) {
                 this.answers.push(0);
             }
         },
-        inputAnswer(index){
+        inputAnswer(index) {
             this.answers[this.currentQuestionIndex] = index;
         },
-        getCorrectAnswers(){
-
+        getCorrectAnswers() {
             var correct = [];
 
             for (let index = 0; index < this.questions.length; index++) {
                 const question = this.questions[index];
 
-                correct.push(question.answer-1);
-                
+                correct.push(question.answer - 1);
             }
 
             return correct;
         }
-
-
     },
     name: 'evaluation',
-    components: {
-
-    },
-    data () {
+    components: {},
+    data() {
         return {
-        options : [{text:'option A'},{text:'option B'},{text:'option C'},{text:'option D'},{text:'option E'}],
-        questions : [],
-        currentQuestionIndex : 0,
-        currentQuestion : {},
-        answers : [],
-        level : 0,
-        selected: [0,0,0,0]
-        }
-    },
-
-}
+            options: [
+                { text: 'option A' },
+                { text: 'option B' },
+                { text: 'option C' },
+                { text: 'option D' },
+                { text: 'option E' }
+            ],
+            questions: [],
+            currentQuestionIndex: 0,
+            currentQuestion: {},
+            answers: [],
+            level: 0,
+            selected: [0, 0, 0, 0]
+        };
+    }
+};
 </script>
 
 <style scoped>
@@ -287,7 +256,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: "Poppins", sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     min-height: 100vh;
 }

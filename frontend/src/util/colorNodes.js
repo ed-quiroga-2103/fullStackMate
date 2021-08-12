@@ -8,8 +8,7 @@ export const colorNodes = (nodes, progress) => {
         var verified = true;
 
         if (typeof needs !== 'undefined') {
-            console.log(needs)
-                //Itera por la lista de dependencias
+            //Itera por la lista de dependencias
             for (let cont = 0; cont < needs.length; cont++) {
                 //Selecciona el indice de la dependencia
                 const need = needs[cont];
