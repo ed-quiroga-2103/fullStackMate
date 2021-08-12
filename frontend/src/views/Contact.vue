@@ -1,60 +1,74 @@
 <template>
-<!DOCTYPE html>
-<html lang="en">
   <div>
-        <div class="container-fluid center">
-        <form>
-            <div class="form-group">
-                <label for="exampleFormControlInput1">Question</label>
-                <input class="form-control" id="exampleFormControlInput1" placeholder="">
-            </div>
-            <div class="form-group">
-                <label for="exampleFormControlSelect1">Example select</label>
-                <select class="form-control" id="exampleFormControlSelect1">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="exampleFormControlSelect2">Example multiple select</label>
-                <select multiple class="form-control" id="exampleFormControlSelect2">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="exampleFormControlTextarea1">Example textarea</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-            </div>
-        </form>
-        <button id="show-modal" @click="show = true">Show Modal</button>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="content-section">
+            <h2>Lista de Contactos</h2>
+            <ul class="list-group">
+              <a class="list-group-item list-group-item-action"
+                >Profesor 1 - Correo profesor@itcr.ac.cr</a
+              >
+              <a class="list-group-item list-group-item-action"
+                >Profesor 2 - Correo profesor@itcr.ac.cr</a
+              >
+            </ul>
+          </div>
         </div>
+        <!-- En caso de tener nombre - Correo
+         <div class="col-md-4">
+          <div class="content-section">
+            <h2>Correos</h2>
+            <ul class="list-group">
+              <a class="list-group-item list-group-item-action">Profesor 1</a>
+              <a class="list-group-item list-group-item-action">Profesor 2</a>
+            </ul>
+          </div>
+        </div> -->
+      </div>
     </div>
-</html>
+
+    <div class="container">
+      <h1>Contacto</h1>
+      <div class="content-section">
+        <h2>¿Tienes alguna pregunta?</h2>
+        <h3>¡Escribenos!</h3>
+        <ul class="list-group">
+          <a class="list-group-item list-group-item-action"
+            >Correo estudiantec: estudiante@estudiantec.cr</a
+          >
+          <a class="list-group-item list-group-item-action"
+            >Número: 8888-8888</a
+          >
+
+          <div class="form-group col-md-03">
+            <label> O deja tu comentario:</label>
+            <input type="mail" class="form-control" formControlName="comment" />
+          </div>
+          <div class="form-group col-md-auto">
+            <a href="/home" class="button btn btn-dark btn-primary-spacing"
+              >Enviar</a
+            >
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-
-
 export default {
-  name: 'Contact',
-  components: {
-  },
+  name: "Contact",
+  components: {},
   data() {
     return {
-        showModal: false
-        }
-    },
+      showModal: false,
+    };
+  },
   methods: {
-      show(){}
-  }
-}
+    show() {},
+  },
+};
 </script>
 
 <style>
@@ -62,5 +76,9 @@ export default {
   margin: auto;
   width: 50%;
   padding: 10px;
+}
+.container {
+  margin-top: 5%;
+  background-color: #6e6e77;
 }
 </style>
