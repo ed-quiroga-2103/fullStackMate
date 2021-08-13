@@ -125,13 +125,13 @@ export default {
         this.currentQuestionIndex += 1;
         this.currentQuestion = this.questions[this.currentQuestionIndex];
       } else {
-        console.log("Finished", this.answers);
-        console.log("Answers", this.getCorrectAnswers());
+        //console.log("Finished", this.answers);
+        //console.log("Answers", this.getCorrectAnswers());
 
-        console.log(
+        /*console.log(
           "result",
           this.isEqualList(this.answers, this.getCorrectAnswers())
-        );
+        );*/
 
         if (this.isEqualList(this.answers, this.getCorrectAnswers())) {
           if (this.level === 2) {
@@ -170,7 +170,7 @@ export default {
             });
           } else this.level += 1;
         } else {
-          console.log("wrong answers");
+          console.log("wrong answers, level not completed");
         }
       }
     },
@@ -238,7 +238,6 @@ export default {
         { text: "option B" },
         { text: "option C" },
         { text: "option D" },
-        { text: "option E" },
       ],
       questions: [],
       currentQuestionIndex: 0,
