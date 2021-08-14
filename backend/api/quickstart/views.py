@@ -15,26 +15,6 @@ from functools import wraps
 
 mongo_driver = MongoDriver('mate')
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-
-
 
 def token_required(f):
     @wraps(f)
@@ -48,13 +28,15 @@ def token_required(f):
             return JsonResponse({'msg':'no token'}, safe=False)
 
         try:
-            data = jwt.decode(token, 'SECRET_KEY')
-            print(data)
-        except:
-            return JsonResponse({'msg': 'decode error'}, safe=False)
+            key = 'secret'
+            data = jwt.decode(token, key, algorithms=["HS256"])
+        except Exception as e:
+
+            return JsonResponse({'msg': str(e)}, safe=False)
         try: 
-            data = jwt.decode(token, 'SECRET_KEY')
-            current_user = data["user"]
+            key = 'secret'
+            data = jwt.decode(token, key, algorithms=["HS256"])
+            current_user = data
             
         except:
             return JsonResponse({'msg':'no user'}, safe=False)
@@ -63,8 +45,8 @@ def token_required(f):
 
     return decorated
 
-@token_required
-def main_graph(request, current_user):
+@api_view(['GET'])
+def main_graph(request):
     data_str = mongo_driver.get_main_graph()
      
     response = JsonResponse(data_str, safe=False)
@@ -76,6 +58,13 @@ def main_graph(request, current_user):
     return response
 
 
+@token_required
+def me(current_user, request):
+    user = mongo_driver.get_user(current_user)
+
+    return JsonResponse({"user":user}, safe=False)
+
+
 @api_view(['GET','POST'])
 def login(request):
     
@@ -83,21 +72,24 @@ def login(request):
 
     user = mongo_driver.get_user(params)
 
-    print("USER FROM MONGO: ", user)
-
     if user == None or isinstance(user, bool):
 
         return JsonResponse({'status':False}, safe=False)
 
     else:
-        
 
         data_str = mongo_driver.get_main_graph()
         info = mongo_driver.get_graph_info()
-        time_limit = datetime.datetime.utcnow() + datetime.timedelta(minutes=30) #Tiempo límite, no se valida en el servidor por el momento, solo en VueJS
-        request.data['exp'] = time_limit
         payload = request.data
-        token = jwt.encode(payload,"SECRET_KEY")
+        print(payload)
+        key = 'secret'
+        try:
+            token = jwt.encode(payload, key, algorithm="HS256")
+        except Exception as e:
+            print("error: " + str(e))
+
+            return JsonResponse({"msg": str(e)})
+        
         return JsonResponse({'token':token,'data':data_str, 'info':info, 'user':user, 'status': True}, safe=False)
 
 @api_view(['GET','POST'])

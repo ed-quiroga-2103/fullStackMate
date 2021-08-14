@@ -1,155 +1,147 @@
 <template>
     <div class="bg-dark-custom mainbody center-screen">
-      <!-- contain mx-auto px-5 py-5 bg-contrast-custom position-absolute top-50 start-50 translate-middle font-light-custom rcorners -->
-      <form v-on:submit.prevent="onClick" class="contain px-4 bg-contrast-custom font-light-custom rcorners">
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label font-light-custom">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label font-light-custom">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-          <label class="form-check-label font-light-custom" for="exampleCheck1">Remember Username</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Log In!</button>
-    </form>
-  </div>
+        <!-- contain mx-auto px-5 py-5 bg-contrast-custom position-absolute top-50 start-50 translate-middle font-light-custom rcorners -->
+        <form
+            v-on:submit.prevent="onLogin"
+            class="contain px-4 bg-contrast-custom font-light-custom rcorners"
+        >
+            <div class="mb-3">
+                <label
+                    for="exampleInputEmail1"
+                    class="form-label font-light-custom"
+                    >Email address</label
+                >
+                <input
+                    type="email"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                />
+                <div id="emailHelp" class="form-text">
+                    We'll never share your email with anyone else.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label
+                    for="exampleInputPassword1"
+                    class="form-label font-light-custom"
+                    >Password</label
+                >
+                <input
+                    type="password"
+                    class="form-control"
+                    id="exampleInputPassword1"
+                />
+            </div>
+            <div class="mb-3 form-check">
+                <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="exampleCheck1"
+                />
+                <label
+                    class="form-check-label font-light-custom"
+                    for="exampleCheck1"
+                    >Remember Username</label
+                >
+            </div>
+            <button type="submit" class="btn btn-primary">Log In!</button>
+        </form>
+    </div>
 </template>
 
 <script>
+import VueCookies from 'vue-cookies';
+
 var salt = '1234123412341234';
 var saltBuffer = new Buffer(salt).toString('hex');
 var crypto = require('crypto');
 var axios = require('axios');
 
-import {setWithExpiry} from "../util/utilities.js"
-
-
 export default {
-    mounted(){
-      this.$store.commit("changeLogState", "0");
+    mounted() {},
 
-      console.log(this.$store.state.logged);
-
-    },
-    data() {
-        return {
-              
-        }
-    },
-    methods:{
-        onClick(){
+    methods: {
+        onLogin() {
             var email = document.getElementById('exampleInputEmail1').value;
             var pass = document.getElementById('exampleInputPassword1').value;
-            
-            var cryptoPass = crypto.pbkdf2Sync(new Buffer(pass), new Buffer(saltBuffer, 'hex'), 1000, 32, 'sha1');
 
-            
+            var cryptoPass = crypto.pbkdf2Sync(
+                new Buffer(pass),
+                new Buffer(saltBuffer, 'hex'),
+                1000,
+                32,
+                'sha1'
+            );
+
             var usr = {
-                'user': email,
-                'pass': cryptoPass.toString()
+                user: email,
+                pass: cryptoPass.toString()
             };
-
-            var usrString = JSON.stringify(usr);
-            var data = usrString;
 
             var config = {
-              method: 'post',
-              url: 'http://localhost:8000/login',
-              headers: { 
-                  'Authorization': 'Basic QWRtaW46MTIzNDU=', 
-                  'Content-Type': 'application/json'
-              },
-              data: data
+                method: 'post',
+                url: 'http://localhost:8000/login',
+                headers: {
+                    Authorization: 'Basic QWRtaW46MTIzNDU=',
+                    'Content-Type': 'application/json'
+                },
+                data: usr
             };
 
-
-
             axios(config)
-              .then(response=>{
-
-                console.log("Response: ", response);
-                //Setteado para que el token expire en 3 horas.
-                //Si el token expira, el sistema debería redireccionar a la pagina de login, dando un mensaje de alerta que la sesión expiró.
-                //Importante: Programar una función para que el tiempo se reinicie cada vez que se interactua con un componente nuevo (SIN REALIZAR)
-                setWithExpiry('token', response.data.token, 10800000);
-
-                if(response.data.data != "Wrong password"){
+                .then(response => {
+                    VueCookies.set('session_token', response.data.token);
 
                     var status = response.data.status;
 
-                    if(!status){
-                      console.log("Wrong user or password");
+                    if (!status) {
+                        console.log('Wrong user or password');
+                    } else {
+                        var info = response.data.info; //Ask later, move it where its needed
+                        var user = response.data.user;
+
+                        //Should we save the graphs as states??
+                        //Yes we should
+                        //Important information used across components is stored in Vuex Store
+                        this.$store.commit('changeInfoState', info);
+                        this.$store.commit('changeUserState', user);
+                        this.$store.commit('changeLogState', '1');
+
+                        this.$router.push('/home');
                     }
-                    else{
-                      var data = response.data.data;
-                      var info = response.data.info; //Pedir despues
-                      var user = response.data.user; 
-                    
-                      var dataStr = JSON.stringify(data);
-                      var infoStr = JSON.stringify(info);
-                      var userStr = JSON.stringify(user);
-
-                      //Should we save the graphs as states???
-                      this.$store.commit("changeMainGraphState",data);
-                      
-                      console.log("Store graph: ", this.$store.state.mainGraph);
-                      
-                      //No localstorage                 
-                      //This has to be moved 
-                      localStorage.setItem('mainGraph', dataStr);
-                      localStorage.setItem('info', infoStr);
-                      localStorage.setItem('currentGraphId', 'main');
-                      localStorage.setItem('currentGraph', dataStr);
-                      localStorage.setItem('user', userStr);
-
-
-                      this.$store.commit("changeLogState", "1");
-
-                      //this.$router.push('/home');
-                      
-                    }
-                }
-            }).catch(err => {
-              console.log(err);
-            });
-
+                })
+                .catch(err => {
+                    console.log('[Login.vue] Error: ', err);
+                });
         }
     }
-        
-}
+};
 </script>
 
 <style scoped>
-
 .contain {
-  min-width: 360px;
-  width: 35%;
-  padding-top: 3%;
-  padding-bottom: 5%;
-  display: flex;  
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: left;
-  text-align: left;
+    min-width: 360px;
+    width: 35%;
+    padding-top: 3%;
+    padding-bottom: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: left;
+    text-align: left;
 }
-.mainbody{
-  height: 100%;
-  width: 100%;
+.mainbody {
+    height: 100%;
+    width: 100%;
 }
-
 
 .center-screen {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 10%;
 }
-
 </style>
