@@ -1,0 +1,31 @@
+.bg-highlight-custom {
+    background-color: #de354c;
+}
+
+.bg-secondary-custom {
+    background-color: #932432;
+}
+
+.bg-contrast-custom {
+    background-color: #3C1874;
+}
+
+.bg-dark-custom {
+    background-color: #283747;
+}
+
+.bg-clear-custom {
+    background-color: #f3f3f3;
+}
+
+.show-border {
+    border: 3px solid #8AC007;
+}
+
+.font-light-custom {
+    color: #f3f3f3
+}
+
+.rcorners {
+    border-radius: 15px;
+}

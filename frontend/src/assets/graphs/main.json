@@ -1,0 +1,48 @@
+{   "mainGraph": 
+        { "nodes": [
+                { "id": 1, "_color": "green", "_size": 100, "name": "Ecuaciones" },
+                { "id": 2, "name": "Ecuaciones Lineales " },
+                { "id": 3 },
+                { "id": 4 },
+                { "id": 5 },
+                { "id": 6 }
+            ],
+
+        "links": [
+                { "sid": 1, "tid": 2 },
+                { "sid": 2, "tid": 3 },
+                { "sid": 4, "tid": 5 },
+                { "sid": 6, "tid": 5 },
+                { "sid": 1, "tid": 5 }
+                ]
+            },
+    "1": 
+        { "nodes": [
+        { "id": 1, "_color": "green", "name": "Teoría"},
+        { "id": 2, "name": "Video"},
+        { "id": 3, "name":"Práctica" }
+
+    ],
+    
+    "links": [
+        { "sid": 1, "tid": 2 },
+        { "sid": 2, "tid": 3 }
+        ]
+    },
+    "options": {
+        "force": 10000,
+        "nodeSize": 50,
+        "nodeLabels": true,
+        "linkWidth":15,
+        "canvas":false,
+        "strLinks": true,
+        "size": 
+            {
+            "w": 0,
+            "h": 0
+            }
+        },
+        
+    "graph1": ["https://es.wikipedia.org/wiki/Ecuaci%C3%B3n", "https://www.youtube.com/watch?v=lDk2UVS4iuw"]
+    
+}
