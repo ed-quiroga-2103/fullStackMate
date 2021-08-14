@@ -1,20 +1,16 @@
-<template>  
-    <TutorEnv/>
+<template>
+    <TutorEnv />
 </template>
 
 <script>
-
-import TutorEnv from "../components/graph/TutorEnv"
+import TutorEnv from '../components/graph/TutorEnv';
 
 export default {
-  name: 'Home',
-  components: {    
-    TutorEnv
-  }
-}
+    name: 'Home',
+    components: {
+        TutorEnv
+    }
+};
 </script>
 
-<style scoped>
-
-
-</style>
+<style scoped></style>
