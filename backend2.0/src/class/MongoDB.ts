@@ -1,8 +1,12 @@
 import { MongoClient } from 'mongodb';
+import config from '../lib/config/config';
 
-const uri =
-    'mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false';
+class MongoDB {
+    connect = () => {
+        return new MongoClient(config.DATABASE_URI);
+    };
+}
 
-const MongoDB = new MongoClient(uri);
+const db = new MongoDB().connect();
 
-export default MongoDB;
+export default db;

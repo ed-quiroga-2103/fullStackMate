@@ -3,6 +3,7 @@ import { Response } from 'express';
 import cors from 'cors';
 import userApp from './api/user';
 import authApp from './api/auth';
+import graphsApp from './api/graph';
 
 const mainApp = express();
 
@@ -28,6 +29,7 @@ mainApp.use(cors());
 
 mainApp.use('/user', userApp);
 mainApp.use('/auth', authApp);
+mainApp.use('/graphs', graphsApp);
 
 mainApp.listen(port, () => {
     console.log(`App listening on PORT ${port}`);

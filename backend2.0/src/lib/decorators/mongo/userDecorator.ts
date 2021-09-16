@@ -6,8 +6,6 @@ const userDecorator = (resolver: (...args: any[]) => any) => {
         const db = MongoDB.db('mate');
         const collection = db.collection('users');
 
-        args.push(collection);
-
         const result = await resolver.call(args, args[0], collection);
 
         await MongoDB.close();
