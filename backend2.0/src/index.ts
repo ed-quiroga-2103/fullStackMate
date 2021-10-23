@@ -1,9 +1,10 @@
 import express from 'express';
 import { Response } from 'express';
 import cors from 'cors';
-import userApp from './api/user';
 import authApp from './api/auth';
 import graphsApp from './api/graph';
+import auth from './lib/auth';
+import { main as connectDb } from './lib/database/index';
 
 const mainApp = express();
 
@@ -27,10 +28,10 @@ mainApp.use(
 );
 mainApp.use(cors());
 
-mainApp.use('/user', userApp);
+mainApp.use('/graph', graphsApp);
 mainApp.use('/auth', authApp);
-mainApp.use('/graphs', graphsApp);
 
 mainApp.listen(port, () => {
+    connectDb();
     console.log(`App listening on PORT ${port}`);
 });

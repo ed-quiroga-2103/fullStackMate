@@ -2,9 +2,7 @@ import { Response, Request } from 'express';
 import graphLib from '../../lib/graphs';
 
 const getGraphById = async (req: Request, res: Response) => {
-    const graph = await graphLib
-        .updateGraph(req.params.id, req.body)
-        .catch((error) => {});
+    const graph = await graphLib.getGraph(req.params.id).catch((error) => {});
 
     if (!graph) {
         res.status(404);

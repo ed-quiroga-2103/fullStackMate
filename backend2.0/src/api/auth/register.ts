@@ -1,26 +1,10 @@
 import { Response, Request } from 'express';
-import mongoLib from '../../lib/mongo';
 import jwt from 'jsonwebtoken';
-import { User } from '../../types';
+import authLib from '../../lib/auth';
+import config from '../../lib/config/config';
 
-const login = async (req: Request, res: Response) => {
-    // Update after new database
-
-    const data: User = req.body;
-    const params = {
-        name: data.name,
-        lastName: data.lastName,
-        email: data.email,
-        dni: data.dni,
-        lastCourse: data.lastCourse,
-        admitionYear: data.admitionYear,
-        progress: [],
-    };
-
-    const user = await mongoLib.insertUser(params).catch((error) => {
-        res.status(500);
-        res.send({ message: error.message });
-    });
+const register = async (req: Request, res: Response) => {
+    const user = await authLib.register(req.body).catch((error) => {});
 
     if (!user) {
         res.status(403);
@@ -31,19 +15,16 @@ const login = async (req: Request, res: Response) => {
         return;
     }
 
-    const token = jwt.sign({ user }, '123456', {
-        expiresIn: '2h',
+    const token = jwt.sign({}, config.JWT_SECRET, {
+        expiresIn: '12h',
     });
 
-    const refreshToken = jwt.sign({ user }, '456123', {
+    const refreshToken = jwt.sign({}, config.JWT_SECRET, {
         expiresIn: '96h',
     });
 
     res.status(200);
     res.send({ token, refreshToken });
-
-    console.log('User registered.');
-    console.log('User: ', data.email);
 };
 
-export default login;
+export default register;

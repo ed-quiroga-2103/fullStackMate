@@ -1,15 +1,20 @@
 import { Response, Request } from 'express';
-import { Graph } from '../../types';
-import mongoLib from '../../lib/mongo';
+import graphLib from '../../lib/graphs';
 
 const createGraph = async (req: Request, res: Response) => {
-    const graph: Graph = req.body;
-    const response = await mongoLib.graph.insertGraph(graph).catch((error) => {
-        res.status(500);
-        res.send({ message: error.message });
-    });
+    const graph = await graphLib.createGraph(req.body).catch((error) => {});
 
-    res.send({ response });
+    if (!graph) {
+        res.status(403);
+        res.send({
+            message: 'Ya existe un curso con los datos ingresados',
+            verbose: 'duplicate user',
+        });
+        return;
+    }
+
+    res.status(200);
+    res.send({ graph });
 };
 
 export default createGraph;

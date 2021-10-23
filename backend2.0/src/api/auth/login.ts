@@ -1,18 +1,11 @@
 import { Response, Request } from 'express';
-import mongoLib from '../../lib/mongo';
 import jwt from 'jsonwebtoken';
+import authLib from '../../lib/auth';
+import config from '../../lib/config/config';
 
 const login = async (req: Request, res: Response) => {
     // Update after new database
-    const params = {
-        email: req.body.email,
-        password: req.body.password,
-    };
-
-    const user = await mongoLib.getUser(params).catch(() => {
-        res.status(500);
-        res.send({ message: 'Oops! Unexpected error on login' });
-    });
+    const user = authLib.login(req.body.email, req.body.password);
 
     if (!user) {
         res.status(404);
@@ -20,11 +13,11 @@ const login = async (req: Request, res: Response) => {
         return;
     }
 
-    const token = jwt.sign({ user }, '123456', {
-        expiresIn: '2h',
+    const token = jwt.sign({ user }, config.JWT_SECRET, {
+        expiresIn: '12h',
     });
 
-    const refreshToken = jwt.sign({ user }, '456123', {
+    const refreshToken = jwt.sign({ user }, config.JWT_SECRET, {
         expiresIn: '96h',
     });
 

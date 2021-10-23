@@ -1,12 +1,17 @@
 import express from 'express';
-import createGraph from './createGraph';
-import getGraph from './getGraph';
 import updateGraph from './updateGraph';
+import validateTokenMiddleware from '../validateTokenMiddleware';
+import createGraph from './createGraph';
+import getGraphById from './getGraphById';
 
-const graphsApp = express();
+const graphApp = express();
 
-graphsApp.post('/graph', createGraph);
-graphsApp.get('/graph', getGraph);
-graphsApp.put('/graph', updateGraph);
+graphApp.use(validateTokenMiddleware);
 
-export default graphsApp;
+graphApp.post('/', createGraph);
+
+graphApp.get('/:id', getGraphById);
+
+graphApp.put('/:id', updateGraph);
+
+export default graphApp;
