@@ -5,7 +5,7 @@ import config from '../../lib/config/config';
 
 const login = async (req: Request, res: Response) => {
     // Update after new database
-    const user = authLib.login(req.body.email, req.body.password);
+    const user = await authLib.login(req.body.email, req.body.password);
 
     if (!user) {
         res.status(404);
@@ -13,11 +13,11 @@ const login = async (req: Request, res: Response) => {
         return;
     }
 
-    const token = jwt.sign({ user }, config.JWT_SECRET, {
+    const token = jwt.sign({ email: user.email }, config.JWT_SECRET, {
         expiresIn: '12h',
     });
 
-    const refreshToken = jwt.sign({ user }, config.JWT_SECRET, {
+    const refreshToken = jwt.sign({ email: user.email }, config.JWT_SECRET, {
         expiresIn: '96h',
     });
 

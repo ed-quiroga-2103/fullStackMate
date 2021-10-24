@@ -14,7 +14,7 @@ const getGraphById = async (req: Request, res: Response) => {
     }
 
     res.status(200);
-    res.send({ graph });
+    res.send({ data: graph });
 };
 
 export default getGraphById;

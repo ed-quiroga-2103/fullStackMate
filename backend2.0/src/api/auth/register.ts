@@ -15,11 +15,11 @@ const register = async (req: Request, res: Response) => {
         return;
     }
 
-    const token = jwt.sign({}, config.JWT_SECRET, {
+    const token = jwt.sign({ email: user.email }, config.JWT_SECRET, {
         expiresIn: '12h',
     });
 
-    const refreshToken = jwt.sign({}, config.JWT_SECRET, {
+    const refreshToken = jwt.sign({ email: user.email }, config.JWT_SECRET, {
         expiresIn: '96h',
     });
 
