@@ -10,6 +10,8 @@ import Login from './views/Login';
 import About from './views/About';
 import Profile from './views/Profile';
 import Contact from './views/Contact';
+import Video from './views/Video';
+import Test from './views/Test';
 
 function App() {
     return (
@@ -28,6 +30,12 @@ function App() {
                     </Route>
                     <Route path="/contact">
                         <Contact />
+                    </Route>
+                    <Route path="/video">
+                        <Video />
+                    </Route>
+                    <Route path="/test">
+                        <Test />
                     </Route>
                     <Route path="/">
                         <Home />
