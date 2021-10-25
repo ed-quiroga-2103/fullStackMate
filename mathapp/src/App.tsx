@@ -15,6 +15,8 @@ import Test from './views/Test';
 
 function App() {
     return (
+        <> 
+        <title>Math App</title>
         <Router>
             <Navbar />
             <Box w="100%" p={4}>
@@ -43,6 +45,7 @@ function App() {
                 </Switch>
             </Box>
         </Router>
+        </>
     );
 }
 
