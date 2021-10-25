@@ -8,10 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         logged: false,
-        state: "Log In!",
-        mainGraph: {},
-        info: {},
-        user: {}
+        state: "Log In!"
     },
     getters: {},
     mutations: {
@@ -25,18 +22,6 @@ export default new Vuex.Store({
                 state.logged = false;
                 state.state = "Log In!"
             }
-        },
-
-        changeMainGraphState(state, payload) {
-            state.mainGraph = payload;
-        },
-
-        changeUserState(state, payload) {
-            state.user = payload;
-        },
-
-        changeInfoState(state, payload) {
-            state.info = payload;
         }
 
     },
