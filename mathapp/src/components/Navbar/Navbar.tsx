@@ -8,7 +8,7 @@ import { isLogged, login } from '../../redux/logged';
 import NavDrawer from './NavDrawer';
 import { useHistory } from 'react-router-dom';
 
-interface NavbarProps {}
+interface NavbarProps { }
 
 const Navbar: FunctionComponent<NavbarProps> = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -41,9 +41,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 </GridItem>
                 <GridItem colSpan={1}>
                     <Center>
-                    <Heading  color="gray.500" onClick={() => {
-                history.push('/home');
-            }}>APP Math</Heading>
+                        <Heading color="gray.500" onClick={() => {
+                            history.push('/home');
+                        }}>APP Math</Heading>
                     </Center>
                 </GridItem>
             </Grid>

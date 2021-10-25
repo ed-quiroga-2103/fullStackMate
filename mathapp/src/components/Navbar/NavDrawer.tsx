@@ -37,34 +37,34 @@ const NavDrawer: FunctionComponent<NavDrawerProps> = ({
                 <DrawerContent>
                     <DrawerCloseButton />
                     <DrawerHeader>Math app</DrawerHeader>
-                    <Button colorScheme="gray" variant="outline" size="xs"  
-                    onClick={() => {
-                    history.push('/home');
-                }}>
+                    <Button colorScheme="gray" variant="outline" size="xs"
+                        onClick={() => {
+                            history.push('/home');
+                        }}>
                         Principal
                     </Button>
                     <Button colorScheme="gray" variant="outline" size="xs"
-                    onClick={() => {
-                        history.push('/profile');
-                    }}>
+                        onClick={() => {
+                            history.push('/profile');
+                        }}>
                         Perfil
                     </Button>
                     <Button colorScheme="gray" variant="outline" size="xs"
-                    onClick={() => {
-                        history.push('/contact');
-                    }}>
+                        onClick={() => {
+                            history.push('/contact');
+                        }}>
                         Contacto
                     </Button>
-                    
+
                     <Button colorScheme="gray" variant="outline" size="xs"
-                    onClick={() => {
-                        history.push('/about');
-                    }}>
+                        onClick={() => {
+                            history.push('/about');
+                        }}>
                         About
                     </Button>
-                   
+
                     <DrawerFooter>
-                        
+
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
