@@ -45,16 +45,17 @@ const NavDrawer: FunctionComponent<NavDrawerProps> = ({
                     </Button>
                     <Button colorScheme="gray" variant="outline" size="xs"
                     onClick={() => {
-                        history.push('/contact');
-                    }}>
-                        Contacto
-                    </Button>
-                    <Button colorScheme="gray" variant="outline" size="xs"
-                    onClick={() => {
                         history.push('/profile');
                     }}>
                         Perfil
                     </Button>
+                    <Button colorScheme="gray" variant="outline" size="xs"
+                    onClick={() => {
+                        history.push('/contact');
+                    }}>
+                        Contacto
+                    </Button>
+                    
                     <Button colorScheme="gray" variant="outline" size="xs"
                     onClick={() => {
                         history.push('/about');

@@ -1,17 +1,18 @@
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Center, Flex, GridItem } from '@chakra-ui/layout';
-import { Grid, IconButton, useDisclosure } from '@chakra-ui/react';
+import { Grid, IconButton, useDisclosure, Heading } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'universal-cookie';
 import { isLogged, login } from '../../redux/logged';
 import NavDrawer from './NavDrawer';
+import { useHistory } from 'react-router-dom';
 
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-
+    const history = useHistory();
     const cookies = new Cookies();
     const dispatch = useDispatch();
     if (cookies.get('mochi')) {
@@ -39,7 +40,11 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                     </Flex>
                 </GridItem>
                 <GridItem colSpan={1}>
-
+                    <Center>
+                    <Heading  color="gray.500" onClick={() => {
+                history.push('/home');
+            }}>APP Math</Heading>
+                    </Center>
                 </GridItem>
             </Grid>
         </>

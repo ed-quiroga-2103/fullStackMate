@@ -1,4 +1,4 @@
-import { Button, Center, Heading, VStack, Text,StackDivider, Box } from '@chakra-ui/react';
+import { Container, Center, Heading, VStack, Text,StackDivider, Box } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import { useHistory } from 'react-router-dom';
 interface LandingProps {}
@@ -18,10 +18,8 @@ const Landing: FunctionComponent<LandingProps> = () => {
         spacing={4}> 
         <Center>
                 <Heading>APP Math</Heading>
-
-            
             </Center>
-                   
+       <Container>            
             <Feature
         title="¿Qué somos?"
         desc="Es un proyecto de la escuela de matemática del ITCR para
@@ -31,8 +29,8 @@ const Landing: FunctionComponent<LandingProps> = () => {
         title="¿En qué te servirá?"
         desc="En está página encontrará toda la materia, práctica y ejercicios
         necesarios para el curso."
-      />
-        <Heading>Proyeto de la Escuela de Matemática, ITCR</Heading>
+      /></Container> 
+        <Heading>Proyecto de la Escuela de Matemática, ITCR</Heading>
             </VStack>
         </>
     );

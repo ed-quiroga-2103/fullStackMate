@@ -1,10 +1,10 @@
 import { Button, Flex , Center, Input,
     FormControl,
     FormLabel,
-    FormErrorMessage,
+    Stack,
     FormHelperText,
     InputGroup,
-    InputRightElement,} from '@chakra-ui/react';
+    InputRightElement,Spacer} from '@chakra-ui/react';
 import React from 'react';
 import { FunctionComponent } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -17,12 +17,15 @@ const Landing: FunctionComponent<LandingProps> = () => {
     const handleClick = () => setShow(!show)
     const history = useHistory();
     return (
+        <>
+        <Stack spacing={5}>
         <Center>
-        <Flex height="90vh" alignItems="center" justifyContent="center">
+        <Flex alignItems="center" justifyContent="center">
             <FormControl id="email">
             <FormLabel>Correo electrónico</FormLabel>
             <Input type="email" />
             <FormHelperText>Use el correo institucional.</FormHelperText>
+            
             <InputGroup size="md">
             <Input
                 pr="4.5rem"
@@ -35,13 +38,21 @@ const Landing: FunctionComponent<LandingProps> = () => {
                 </Button>
             </InputRightElement>
             </InputGroup>
-            <Button colorScheme="teal" variant="solid" size="l">
-                        Ingresar
-            </Button>
+            
             </FormControl>
+           
             
         </Flex>
         </Center>
+        <Center>
+        <Button colorScheme="blue"
+            onClick={() => {
+                history.push('/home');
+            }}>
+                        Ingresar
+            </Button>
+        </Center></Stack>
+        </>
     );
 };
 

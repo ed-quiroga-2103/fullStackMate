@@ -1,4 +1,4 @@
-import { Button,VStack,StackDivider, Stack, Heading, Center,
+import { Button,VStack,StackDivider, HStack,Stack, Heading, Center,
     Table,
     Thead,
     Tbody,
@@ -20,7 +20,12 @@ interface LandingProps {}
 const Landing: FunctionComponent<LandingProps> = () => {
     const history = useHistory();
     return (
-        <><VStack
+        <>
+        <Center>
+        <Heading as="h3" size="lg">
+          Contacto de Profesores
+        </Heading></Center>
+        <VStack
         divider={<StackDivider borderColor="gray.200" />}
         spacing={4}>
 
@@ -46,7 +51,9 @@ const Landing: FunctionComponent<LandingProps> = () => {
         </Tr>
     </Tbody>
     </Table> </VStack>
-    <Center spacing={6}>
+    <Center>
+    <HStack spacing={100}>
+
     <Stack spacing={6}>
     <Heading as="h2" size="xl">
     ¿Tienes alguan duda?
@@ -57,6 +64,10 @@ const Landing: FunctionComponent<LandingProps> = () => {
   <Stat>
   <StatLabel>Número</StatLabel>
   <StatNumber>2222-2222</StatNumber>
+  </Stat>
+  <Stat>
+  <StatLabel>Correo</StatLabel>
+  <StatNumber>contacto@itcr.ac.cr</StatNumber>
   </Stat>
   </Stack>
   <Stack spacing={6}> 
@@ -74,7 +85,7 @@ const Landing: FunctionComponent<LandingProps> = () => {
           >
             Enviar
           </Button>
-          </Stack>
+          </Stack></HStack>
     </Center>
     
 
