@@ -12,6 +12,7 @@ import Profile from './views/Profile';
 import Contact from './views/Contact';
 import Video from './views/Video';
 import Test from './views/Test';
+import Graph from './views/Graph'
 
 function App() {
     return (
@@ -38,6 +39,9 @@ function App() {
                     </Route>
                     <Route path="/test">
                         <Test />
+                    </Route>
+                    <Route path="/graph">
+                        <Graph />
                     </Route>
                     <Route path="/">
                         <Home />
