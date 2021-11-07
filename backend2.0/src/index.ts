@@ -5,10 +5,11 @@ import authApp from './api/auth';
 import graphsApp from './api/graph';
 import auth from './lib/auth';
 import { main as connectDb } from './lib/database/index';
+import app from './lib/questions/postQuestion';
 
 const mainApp = express();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3003;
 
 mainApp.get('/', (req, res) => {
     res.send('Hello from express and typescript');
@@ -30,6 +31,7 @@ mainApp.use(cors());
 
 mainApp.use('/graph', graphsApp);
 mainApp.use('/auth', authApp);
+mainApp.use(app);
 
 mainApp.listen(port, () => {
     connectDb();
