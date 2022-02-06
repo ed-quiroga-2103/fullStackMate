@@ -1,7 +1,5 @@
 import { MongoClient, GridFSBucket as Grid, ObjectId } from 'mongodb';
-import express from 'express';
-import { Readable } from 'stream';
-import config from '../config/config';
+import { Response, Request } from 'express';
 import multer from 'multer';
 
 var storage = multer.memoryStorage();
@@ -12,13 +10,6 @@ var upload = multer({
 
 let db;
 
-const photoRoute = express.Router();
-const app = express();
-app.use('/photos', photoRoute);
-
-/**
- * Connect Mongo Driver to MongoDB.
- */
 MongoClient.connect(config.DATABASE_URI, (err, database) => {
     if (err) {
         console.log(
@@ -29,42 +20,7 @@ MongoClient.connect(config.DATABASE_URI, (err, database) => {
     db = database.db('mate');
 });
 
-/**
- * GET photo by ID Route
- */
-photoRoute.get('/:photoID', (req, res) => {
-    try {
-        var photoID = new ObjectId(req.params.photoID);
-    } catch (err) {
-        return res.status(400).json({
-            message:
-                'Invalid PhotoID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters',
-        });
-    }
-
-    let bucket = new Grid(db, {
-        bucketName: 'photos',
-    });
-
-    let downloadStream = bucket.openDownloadStream(photoID);
-
-    downloadStream.on('data', (chunk) => {
-        res.write(chunk);
-    });
-
-    downloadStream.on('error', () => {
-        res.sendStatus(404);
-    });
-
-    downloadStream.on('end', () => {
-        res.end();
-    });
-});
-
-/**
- * POST photo Route
- */
-photoRoute.post('/', (req, res) => {
+const postQuestion = async (req: Request, res: Response)  => {
     upload.single('photo')(req, res, (err) => {
         if (err) {
             return res
@@ -105,4 +61,4 @@ photoRoute.post('/', (req, res) => {
     });
 });
 
-export default app;
+export default postQuestion;

@@ -5,7 +5,6 @@ import authApp from './api/auth';
 import graphsApp from './api/graph';
 import auth from './lib/auth';
 import { main as connectDb } from './lib/database/index';
-import app from './lib/questions/postQuestion';
 
 const mainApp = express();
 
@@ -31,7 +30,6 @@ mainApp.use(cors());
 
 mainApp.use('/graph', graphsApp);
 mainApp.use('/auth', authApp);
-mainApp.use(app);
 
 mainApp.listen(port, () => {
     connectDb();

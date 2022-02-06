@@ -1,20 +1,11 @@
 export interface Question {
-    question: string;
-    correctId: int;
-    type: string;
+    course: string;
+    difficulty: string;
     tags: string[];
     options: Option[];
-    attachments: Attachment[];
 }
 
 export interface Option {
-    id: int;
+    isCorrect: boolean;
     value: string;
-    attachments: Attachment[];
-}
-
-export interface Attachment {
-    name: string;
-    type: string;
-    data: string;
 }
